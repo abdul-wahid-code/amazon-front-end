@@ -15,7 +15,7 @@ const BookingForm = () => {
 
     useEffect(() => {
         // Fetch the list of services from the backend
-        axios.get('http://localhost:8080/services')
+        axios.get('https://top-chassis-429718-j8.ts.r.appspot.com/services/get')
             .then(response => setServices(response.data))
             .catch(error => console.error('Error fetching services:', error));
     }, []);
@@ -30,11 +30,11 @@ const BookingForm = () => {
             service: { serviceid: selectedService }
         };
 
-        axios.post('http://localhost:8080/bookings', booking)
+        axios.post('https://top-chassis-429718-j8.ts.r.appspot.com/bookings', booking)
             .then(response => {
                 console.log('Booking created:', response.data);
                 alert('Booking successfully!');
-                navigate('/confirmation'); // Navigate to a confirmation page after successful booking
+                navigate('/bookings-List'); // Navigate to a confirmation page after successful booking
             })
             .catch(error => console.error('Error creating booking:', error));
     };

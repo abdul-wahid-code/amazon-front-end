@@ -1,44 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom';
 
-function RegisterUserForm() {
+function EditUserForm() {
+  const { userid } = useParams();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    axios.get(`https://top-chassis-429718-j8.ts.r.appspot.com/api/user/${userid}`)
+      .then(response => {
+        const user = response.data;
+        setName(user.name);
+        setEmail(user.email);
+        setPassword(user.password);
+        setPhone(user.phone);
+      })
+      .catch(error => console.error('Error fetching user details:', error));
+  }, [userid]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://top-chassis-429718-j8.ts.r.appspot.com/api/user/save', {
+      const response = await axios.put(`https://top-chassis-429718-j8.ts.r.appspot.com/api/user/${userid}`, {
         name,
         email,
         password,
         phone: Number(phone),
       });
-      console.log('User created:', response.data);
-      alert("User created successfully");
-      navigate('/bookings');
-      // Clear form fields after successful submission
-      setName('');
-      setEmail('');
-      setPassword('');
-      setPhone('');
+      console.log('User updated:', response.data);
+      alert("User updated successfully");
+      navigate('/list-user');
     } catch (error) {
-      console.error('Error creating user:', error);
+      console.error('Error updating user:', error);
     }
   };
 
+  function cancel(){
+    navigate('/list-user')
+  }
   return (
-    
     <div className="container mt-5">
       <div className="card">
         <div className="card-header">
-          <h3>Register User</h3>
+          <h3>Edit User</h3>
         </div>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
@@ -78,7 +88,8 @@ function RegisterUserForm() {
                 onChange={(e) => setPhone(e.target.value)}
               />
             </div>
-            <button type="submit" className="btn btn-primary">Create User</button>
+            <button type="submit" className="btn btn-primary">Update User</button>
+            <button type="submit" className="btn btn-danger" onClick={cancel}>Cancel</button>
           </form>
         </div>
       </div>
@@ -86,4 +97,4 @@ function RegisterUserForm() {
   );
 }
 
-export default RegisterUserForm;
+export default EditUserForm;

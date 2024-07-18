@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginForm.css';
 
@@ -13,7 +13,7 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8080/api/user/login', {
+      const response = await axios.post('https://top-chassis-429718-j8.ts.r.appspot.com/api/user/login', {
         email,
         password,
       });
@@ -22,18 +22,17 @@ const LoginForm = () => {
         navigate('/bookings');
       } else {
         setErrorMessage(response.data.message);
-        navigate('/register');
       }
     } catch (error) {
       console.error('Login error:', error);
       if (error.response && error.response.data) {
-        setErrorMessage(error.response.data);
+        setErrorMessage(error.response.data.message);
       } else {
         setErrorMessage('An error occurred during login. Please try again.');
       }
-      navigate('/register');
     }
   };
+  
 
   return (
     <div className="login-form-container">
@@ -62,6 +61,8 @@ const LoginForm = () => {
           />
         </div>
         <button type="submit" className="submit-button">Login</button>
+        <Link to={'/register'}>register here</Link>
+    
         {errorMessage && <p className="error-message">{errorMessage}</p>}
       </form>
     </div>

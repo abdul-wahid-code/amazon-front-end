@@ -12,7 +12,7 @@ const ServiceForm = () => {
         const newService = { type, description };
 
         try {
-            const response = await axios.post('http://localhost:8080/services', newService);
+            const response = await axios.post('https://top-chassis-429718-j8.ts.r.appspot.com/services', newService);
             console.log('Service created:', response.data);
             alert('Service added successfully!');
             setType('');
@@ -25,7 +25,7 @@ const ServiceForm = () => {
     return (
         <div className="service-form-container">
             <form onSubmit={handleSubmit} className="service-form">
-                <h2>Book a Service</h2>
+                <h2>Add Service</h2>
                 <div className="form-group">
                     <label htmlFor="type">Service Type</label>
                     <input 
